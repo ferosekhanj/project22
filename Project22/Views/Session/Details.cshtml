@@ -1,0 +1,67 @@
+﻿@model Project22.Models.Session
+
+@{
+    ViewData["Title"] = "Details";
+}
+<h1>Session Details</h1>
+<div>
+    <hr />
+    <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-action="Index">Back to List</a>
+    </div>
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Mobile)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Mobile)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.AccountId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AccountId)
+        </dd>
+    </dl>
+</div>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tokens.FirstOrDefault().Number)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tokens.FirstOrDefault().Number)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Tokens)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="Token" asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Number)</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Mobile)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
