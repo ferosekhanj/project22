@@ -20,14 +20,14 @@ namespace Project22.Models
 
         }
 
-        public Account GetAccount(string mobileNumber, string pin)
+        public Account GetAccount(string mobileNumber)
         {
-            return new Account { Id = 0, IsActive = true, LastLogin = DateTime.Now, Mobile = mobileNumber, Tokens = 100 };
+            return Accounts.FirstOrDefault(a => a.Mobile == mobileNumber);
         }
 
-        public IEnumerable<Session> GetSession(string phoneNumber)
+        public IEnumerable<Session> GetSession(string mobileNumber)
         {
-            var account = Accounts.FirstOrDefault(a => a.Mobile == phoneNumber);
+            var account = Accounts.FirstOrDefault(a => a.Mobile == mobileNumber);
             if(account != null)
             {
                 return GetSessions(account.Id);
@@ -37,7 +37,7 @@ namespace Project22.Models
             
         public IEnumerable<Session> GetSessions(int accountId) => Sessions.Where(s => s.AccountId == accountId);
 
-        public Session GetSession(int accountId, int sessionId) => Sessions.Include(s=>s.Tokens).FirstOrDefault(s => s.AccountId == accountId && s.Id == sessionId);
+        public Session GetSession(int sessionId) => Sessions.Include(s=>s.Tokens).FirstOrDefault(s => s.Id == sessionId);
 
         public void CreateSession(Session session)
         {
@@ -61,11 +61,11 @@ namespace Project22.Models
             }
         }
 
-        public Token GetToken(int accountId, int tokenId) => Tokens.Include(t => t.Session).FirstOrDefault(t => t.Id == tokenId && t.Session.AccountId == accountId);
+        public Token GetToken(int tokenId) => Tokens.Include(t => t.Session).FirstOrDefault(t => t.Id == tokenId);
 
-        public void CreateToken(int accountId, int sessionId, Token token)
+        public void CreateToken(int sessionId, Token token)
         {
-            var session = GetSession(accountId, sessionId);
+            var session = GetSession(sessionId);
             token.Number = session.TokenCount + 1;
             session.TokenCount = session.TokenCount + 1;
 

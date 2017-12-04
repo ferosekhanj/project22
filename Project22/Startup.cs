@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Project22.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Project22
 {
@@ -29,6 +30,8 @@ namespace Project22
             services.AddMvc();
             services.AddDbContext<DataRepository>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("dburl")));
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,14 +48,8 @@ namespace Project22
             }
 
             app.UseStaticFiles();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-
-            });
+            app.UseAuthentication();
+            app.UseMvcWithDefaultRoute();
         }
     }
 }

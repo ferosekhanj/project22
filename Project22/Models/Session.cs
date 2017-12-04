@@ -8,6 +8,7 @@ namespace Project22.Models
 {
     public class Session
     {
+        [Display(Name="Session")]
         public int Id { get; set; }
 
         public string Name { get; set; }

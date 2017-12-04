@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Project22.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Project22.Controllers
 {
@@ -12,35 +14,38 @@ namespace Project22.Controllers
     public class SessionController : Controller
     {
         DataRepository dataRepository;
-        int myAccountId = 1;
 
         public SessionController(DataRepository dataRepository)
         {
             this.dataRepository = dataRepository;
         }
 
+        [Authorize]
         public IActionResult Index()
         {
-            return View(dataRepository.GetSessions(myAccountId));
+            return View(dataRepository.GetSessions(GetAccountId()));
         }
 
+        [Authorize]
         public IActionResult Details(int id)
         {
-            return View(dataRepository.GetSession(myAccountId, id));
+            return View(dataRepository.GetSession(id));
         }
 
+        [Authorize]
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Name,Mobile,StartTime")]Session session)
         {
             if (ModelState.IsValid)
             {
-                session.AccountId = myAccountId;
+                session.AccountId = GetAccountId();
                 dataRepository.CreateSession(session);
                 return RedirectToAction(nameof(Index));
             }
@@ -48,9 +53,10 @@ namespace Project22.Controllers
         }
 
         // GET: Sessions/Edit/5
+        [Authorize]
         public IActionResult Edit(int id)
         {
-            var session = dataRepository.GetSession(myAccountId,id);
+            var session = dataRepository.GetSession(id);
             if (session == null)
             {
                 return NotFound();
@@ -61,6 +67,7 @@ namespace Project22.Controllers
         // POST: Sessions/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("Id,Name,Mobile,StartTime,TokenCount,AccountId")] Session session)
@@ -83,6 +90,12 @@ namespace Project22.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(session);
+        }
+
+        private int GetAccountId()
+        {
+            var id = HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.Sid).FirstOrDefault();
+            return (id==null)?-1:int.Parse(id.Value);
         }
 
     }

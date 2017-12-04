@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Project22.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Project22.Controllers
 {
@@ -12,7 +13,6 @@ namespace Project22.Controllers
     public class TokenController : Controller
     {
         DataRepository dataRepository;
-        int myAccountId = 1;
 
         public TokenController(DataRepository dataRepository)
         {
@@ -21,7 +21,7 @@ namespace Project22.Controllers
 
         public IActionResult Details(int id)
         {
-            return View(dataRepository.GetToken(myAccountId, id));
+            return View(dataRepository.GetToken(id));
         }
 
         [Route("/Get/{phoneNumber}")]
@@ -44,7 +44,7 @@ namespace Project22.Controllers
         {
             if (ModelState.IsValid)
             {
-                dataRepository.CreateToken(myAccountId,token.Session.Id,token);
+                dataRepository.CreateToken(token.Session.Id,token);
                 return View("Details",token);
             }
             var sessions = dataRepository.GetSession(phoneNumber);
