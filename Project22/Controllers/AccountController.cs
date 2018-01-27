@@ -22,6 +22,63 @@ namespace Project22.Controllers
         }
 
         [HttpGet]
+        public IActionResult Signup()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Signup(SignupInfo model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var account = dataRepository.GetAccount(model.MobileNumber);
+
+                    if( account != null)
+                    {
+                        throw new InvalidOperationException("Already an account exist with the same phone number.");
+                    }
+
+                    account = new Account
+                    {
+                        IsActive = true,
+                        LastLogin = DateTime.Now,
+                        Mobile = model.MobileNumber,
+                        Name = model.Name,
+                        Pin = model.Pin,
+                        Tokens = 0
+                    };
+                    dataRepository.CreateAccount(account);
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.Name,model.MobileNumber),
+                        new Claim(ClaimTypes.MobilePhone,model.MobileNumber),
+                        new Claim(ClaimTypes.Sid, $"{account.Id}")
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        new AuthenticationProperties());
+
+                    return RedirectToAction(nameof(SessionController.Index), "Session");
+                }
+                catch(Exception e)
+                {
+                    ModelState.AddModelError(string.Empty, e.Message);
+                    return View(model);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Unable to signup");
+                return View(model);
+            }
+        }
+
+        [HttpGet]
         public IActionResult Login(string returnUrl = null)
         {
             return View();

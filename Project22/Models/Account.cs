@@ -8,8 +8,12 @@ namespace Project22.Models
 {
     public class Account
     {
+
         public int Id { get; set; }
 
+        public string Name { get; set; }
+
+        [Required]
         public string Mobile { get; set; }
 
         public int Pin { get; set; }

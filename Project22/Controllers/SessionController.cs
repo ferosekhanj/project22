@@ -92,6 +92,19 @@ namespace Project22.Controllers
             return View(session);
         }
 
+        //// GET: Sessions/Edit/5
+        //[Authorize]
+        //public IActionResult Edit(int id)
+        //{
+        //    var session = dataRepository.GetSession(id);
+        //    if (session == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(session);
+        //}
+
+
         private int GetAccountId()
         {
             var id = HttpContext.User.Claims.Where(c => c.Type == ClaimTypes.Sid).FirstOrDefault();
