@@ -28,12 +28,13 @@ namespace Project22.Controllers
         [HttpGet]
         public IActionResult Book(string phoneNumber)
         {
-            var sessions = dataRepository.GetSession(phoneNumber);
+            var (account, sessions) = dataRepository.GetSession(phoneNumber);
             var selectionList = new List<SelectListItem>();
             foreach (var session in sessions)
-                selectionList.Add(new SelectListItem { Text = session.Name, Value = session.Id.ToString() });
+                selectionList.Add(new SelectListItem { Text = $"{session.StartTime} - {session.Name}", Value = session.Id.ToString() });
 
             ViewBag.Sessions = selectionList;
+            ViewBag.Account = account;
             return View();
         }
 
@@ -47,11 +48,12 @@ namespace Project22.Controllers
                 dataRepository.CreateToken(token.Session.Id,token);
                 return View("Details",token);
             }
-            var sessions = dataRepository.GetSession(phoneNumber);
+            var (account, sessions) = dataRepository.GetSession(phoneNumber);
             var selectionList = new List<SelectListItem>();
             foreach (var session in sessions)
-                selectionList.Add(new SelectListItem { Text = session.Name, Value = session.Id.ToString() });
+                selectionList.Add(new SelectListItem { Text = $"{session.StartTime} - {session.Name}", Value = session.Id.ToString() });
 
+            ViewBag.Account = account;
             ViewBag.Sessions = selectionList;
             return View(token);
         }

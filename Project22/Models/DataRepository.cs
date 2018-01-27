@@ -36,14 +36,14 @@ namespace Project22.Models
             return Accounts.FirstOrDefault(a => a.Mobile == mobileNumber);
         }
 
-        public IEnumerable<Session> GetSession(string mobileNumber)
+        public (Account a,IEnumerable<Session> s) GetSession(string mobileNumber)
         {
             var account = Accounts.FirstOrDefault(a => a.Mobile == mobileNumber);
             if(account != null)
             {
-                return GetSessions(account.Id);
+                return (account,GetSessions(account.Id));
             }
-            return Enumerable.Empty<Session>();
+            return (null, Enumerable.Empty<Session>());
         }
             
         public IEnumerable<Session> GetSessions(int accountId) => Sessions.Where(s => s.AccountId == accountId);

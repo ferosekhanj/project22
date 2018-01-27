@@ -95,8 +95,8 @@ namespace Project22.Controllers
                 {
                     var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name,model.MobileNumber),
-                        new Claim(ClaimTypes.MobilePhone,model.MobileNumber),
+                        new Claim(ClaimTypes.Name,account.Name),
+                        new Claim(ClaimTypes.MobilePhone,account.Mobile),
                         new Claim(ClaimTypes.Sid, $"{account.Id}")
                     };
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -121,6 +121,7 @@ namespace Project22.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return View("SignedOut");
         }
+
         private IActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))

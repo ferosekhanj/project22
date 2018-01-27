@@ -9,18 +9,18 @@
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#">mytoken.in</a>
+            <a class="navbar-brand" href="#">MYTOKEN</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
+            <div class="d-flex justify-content-end">
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a></a>
-                    </li>
 @if (HttpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
 {
+                <li class="nav-item active">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                 </li>
@@ -28,13 +28,14 @@
 else
 {
                 <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Signup">Signup</a>
+                    <a class="btn btn-success" asp-area="" asp-controller="Account" asp-action="Signup">Signup</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                    &nbsp;<a class="btn btn-primary active" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
                 </li>
 }
                 </ul>
+            </div>
             </div>
         </div>
     </nav>
