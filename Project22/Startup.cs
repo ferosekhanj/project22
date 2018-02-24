@@ -27,11 +27,23 @@ namespace Project22
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc().AddSessionStateTempDataProvider();
+
             services.AddDbContext<DataRepository>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("dburl")));
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            // Adds a default in-memory implementation of IDistributedCache.
+            // TODO: Switch this to SQL server or Redis
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                // Set a short timeout for easy testing. 
+                // TODO: remove this after testing
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+                options.Cookie.HttpOnly = true; // cookie not accessible in the client
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,7 +61,9 @@ namespace Project22
 
             app.UseStaticFiles();
             app.UseAuthentication();
+            app.UseSession();
             app.UseMvcWithDefaultRoute();
+
         }
     }
 }

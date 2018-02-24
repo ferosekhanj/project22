@@ -13,6 +13,11 @@ namespace Project22.Models
         public int Number { get; set; }
 
         [Required]
+        [Display(Name = "OTP")]
+        public int Password { get; set; }
+
+        [Required]
+        [Display(Name = "Your Mobile number")]
         public string Mobile { get; set; }
 
         public Session Session { get; set; }

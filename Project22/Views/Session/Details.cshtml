@@ -18,6 +18,18 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt>
+            @Html.DisplayNameFor(model => model.MaxTokens)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MaxTokens)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.TokenCount)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.TokenCount)
+        </dd>
+        <dt>
             @Html.DisplayNameFor(model => model.Mobile)
         </dt>
         <dd>
@@ -28,12 +40,6 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.StartTime)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.AccountId)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.AccountId)
         </dd>
     </dl>
 </div>
@@ -55,7 +61,7 @@
             {
                 <tr>
                     <td>
-                        <a asp-controller="Token" asp-action="Details" asp-route-id="@item.Id">@Html.DisplayFor(modelItem => item.Number)</a>
+                        @Html.DisplayFor(modelItem => item.Number)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Mobile)

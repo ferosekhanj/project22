@@ -30,6 +30,16 @@
                 <span asp-validation-for="StartTime" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="MaxTokens" class="control-label"></label>
+                <input asp-for="MaxTokens" class="form-control" />
+                <span asp-validation-for="MaxTokens" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TokenCount" class="control-label"></label>
+                <span>@Model.TokenCount</span>
+                <span asp-validation-for="TokenCount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
             </div>
         </form>

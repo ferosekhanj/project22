@@ -41,7 +41,7 @@ namespace Project22.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Name,Mobile,StartTime")]Session session)
+        public IActionResult Create([Bind("Name,Mobile,StartTime,MaxTokens")]Session session)
         {
             if (ModelState.IsValid)
             {
@@ -70,7 +70,7 @@ namespace Project22.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,Name,Mobile,StartTime,TokenCount,AccountId")] Session session)
+        public IActionResult Edit(int id, [Bind("Id,Name,Mobile,StartTime,TokenCount,MaxTokens,AccountId")] Session session)
         {
             if (id != session.Id)
             {
@@ -85,9 +85,9 @@ namespace Project22.Controllers
                 }
                 catch (DbUpdateConcurrencyException e)
                 {
-                        throw;
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
+                return View(nameof(Details), dataRepository.GetSession(id));
             }
             return View(session);
         }

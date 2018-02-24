@@ -19,6 +19,8 @@ namespace Project22.Models
 
         public int AccountId { get; set; }
 
+        public int MaxTokens { get; set; }
+
         [ConcurrencyCheck]
         public int TokenCount { get; set; }
 
@@ -29,6 +31,6 @@ namespace Project22.Models
             Tokens = new List<Token>();
         }
 
-        public override string ToString() => $"{Id} {Name} {Mobile} {StartTime} {TokenCount} {AccountId}";
+        public override string ToString() => $"{Id} {Name} {Mobile} {StartTime} {MaxTokens} {TokenCount} {AccountId}";
     }
 }

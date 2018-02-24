@@ -28,6 +28,7 @@ namespace Project22.Controllers
         [HttpGet]
         public IActionResult Book(string phoneNumber)
         {
+            HttpContext.Session.Set("OTP", new byte[]{0,0,0,0});
             var (account, sessions) = dataRepository.GetSession(phoneNumber);
             var selectionList = new List<SelectListItem>();
             foreach (var session in sessions)
@@ -35,15 +36,29 @@ namespace Project22.Controllers
 
             ViewBag.Sessions = selectionList;
             ViewBag.Account = account;
+            ViewBag.PasswordSent = false;
             return View();
+        }
+
+        // TODO integrate ASPNetCoreAPIRateLimit
+        [Route("/Otp/{phoneNumber}")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult GetOneTimePassword(string phoneNumber)
+        {
+            Random r = new Random(Environment.TickCount);
+            var otp = r.Next() % 10000;
+            HttpContext.Session.Set("OTP", BitConverter.GetBytes(otp));
+            return Content($"{otp}");
         }
 
         [Route("/Get/{phoneNumber}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Book(string phoneNumber,[Bind("Number,Mobile,Session")]Token token)
+        public IActionResult Book(string phoneNumber,[Bind("Number,Mobile,Password,Session")]Token token)
         {
-            if (ModelState.IsValid)
+            bool isOTPCorrect = CheckOtp();
+            if (ModelState.IsValid && isOTPCorrect)
             {
                 dataRepository.CreateToken(token.Session.Id,token);
                 return View("Details",token);
@@ -55,7 +70,19 @@ namespace Project22.Controllers
 
             ViewBag.Account = account;
             ViewBag.Sessions = selectionList;
+            if (!isOTPCorrect)
+            {
+                ModelState.AddModelError(nameof(Token.Password), "Please enter the correct OTP sent to your mobile");
+                ViewBag.PasswordSent = true;
+            }
             return View(token);
+
+            // Check OTP
+            bool CheckOtp()
+            {
+                return HttpContext.Session.TryGetValue("OTP", out byte[] bytes) && token.Password == BitConverter.ToInt32(bytes, 0);
+            }
+
         }
     }
 }

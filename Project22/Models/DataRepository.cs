@@ -41,11 +41,13 @@ namespace Project22.Models
             var account = Accounts.FirstOrDefault(a => a.Mobile == mobileNumber);
             if(account != null)
             {
-                return (account,GetSessions(account.Id));
+                return (account, GetAvailableSessions(account.Id));
             }
             return (null, Enumerable.Empty<Session>());
         }
-            
+
+        public IEnumerable<Session> GetAvailableSessions(int accountId) => Sessions.Where(s => s.AccountId == accountId && s.TokenCount<s.MaxTokens);
+
         public IEnumerable<Session> GetSessions(int accountId) => Sessions.Where(s => s.AccountId == accountId);
 
         public Session GetSession(int sessionId) => Sessions.Include(s=>s.Tokens).FirstOrDefault(s => s.Id == sessionId);
@@ -63,6 +65,8 @@ namespace Project22.Models
             {
                 try
                 {
+                    // Make sure maxtokens is not less than issued tokens
+                    session.MaxTokens = session.MaxTokens < session.TokenCount ? session.TokenCount : session.MaxTokens;
                     SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException e)
