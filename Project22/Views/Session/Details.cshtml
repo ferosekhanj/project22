@@ -51,6 +51,9 @@
                     @Html.DisplayNameFor(model => model.Tokens.FirstOrDefault().Number)
                 </th>
                 <th>
+                    @Html.DisplayNameFor(model => model.Tokens.FirstOrDefault().Name)
+                </th>
+                <th>
                     @Html.DisplayNameFor(model => model.Tokens.FirstOrDefault().Number)
                 </th>
                 <th></th>
@@ -62,6 +65,9 @@
                 <tr>
                     <td>
                         @Html.DisplayFor(modelItem => item.Number)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Mobile)

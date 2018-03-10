@@ -55,7 +55,7 @@ namespace Project22.Controllers
         [Route("/Get/{phoneNumber}")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Book(string phoneNumber,[Bind("Number,Mobile,Password,Session")]Token token)
+        public IActionResult Book(string phoneNumber,[Bind("Number,Name,Mobile,Password,Session")]Token token)
         {
             bool isOTPCorrect = CheckOtp();
             if (ModelState.IsValid && isOTPCorrect)

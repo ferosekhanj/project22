@@ -8,6 +8,7 @@ namespace Project22.Models
 {
     public class Token
     {
+        [Display(Name="BookingRef#")]
         public int Id { get; set; }
 
         public int Number { get; set; }
@@ -15,6 +16,10 @@ namespace Project22.Models
         [Required]
         [Display(Name = "OTP")]
         public int Password { get; set; }
+
+        [Required]
+        [Display(Name = "Your Name")]
+        public string Name { get; set; }
 
         [Required]
         [Display(Name = "Your Mobile number")]
