@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace Project22.Controllers
 {
-    [Route("[controller]/[action]/{id?}")]
+    [Route("[controller]/[action]")]
     public class SessionController : Controller
     {
         DataRepository dataRepository;
@@ -33,13 +33,14 @@ namespace Project22.Controllers
         }
 
         [Authorize]
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("[controller]/[action]/{id?}")]
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Name,Mobile,StartTime,MaxTokens")]Session session)
         {
@@ -54,6 +55,7 @@ namespace Project22.Controllers
 
         // GET: Sessions/Edit/5
         [Authorize]
+        [HttpGet("[controller]/[action]/{id?}")]
         public IActionResult Edit(int id)
         {
             var session = dataRepository.GetSession(id);
@@ -68,7 +70,7 @@ namespace Project22.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [Authorize]
-        [HttpPost]
+        [HttpPost("[controller]/[action]/{id?}")]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, [Bind("Id,Name,Mobile,StartTime,TokenCount,MaxTokens,AccountId")] Session session)
         {

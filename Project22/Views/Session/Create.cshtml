@@ -1,7 +1,7 @@
 ﻿@model Project22.Models.Session
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create Session...";
 }
 
 <h1>Create New Session</h1>
@@ -24,6 +24,11 @@
                 <label asp-for="StartTime" class="control-label"></label>
                 <input type="datetime" asp-for="StartTime" class="form-control" />
                 <span asp-validation-for="StartTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxTokens" class="control-label"></label>
+                <input asp-for="MaxTokens" class="form-control" />
+                <span asp-validation-for="MaxTokens" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />
